@@ -2,8 +2,6 @@
 
 [semantic-release](https://github.com/semantic-release/semantic-release) plugin to publish a package to [JSR](https://jsr.io).
 
-This package itself is published to npm from GitHub Actions via `semantic-release`.
-
 | Step               | Description                                                                       |
 | ------------------ | --------------------------------------------------------------------------------- |
 | `verifyConditions` | Validates options, locates the JSR config file, and runs `jsr publish --dry-run`. |
@@ -13,7 +11,7 @@ This package itself is published to npm from GitHub Actions via `semantic-releas
 ## Install
 
 ```bash
-npm install --save-dev semantic-release semantic-release-jsr
+npm install --save-dev semantic-release @sourceregistry/semantic-release-jsr
 ```
 
 ## Usage
@@ -91,12 +89,3 @@ If your JSR package uses token-based auth instead of OIDC, also provide the envi
   ]
 }
 ```
-
-## Releasing This Package
-
-This repository's own release workflow publishes `semantic-release-jsr` to npm through `semantic-release`.
-
-Required GitHub configuration:
-
-- `secrets.NPM_TOKEN`: npm automation token for publishing this package
-- optional `vars.NODE_VERSION`: Node version used by the release job; defaults to `lts/*`
