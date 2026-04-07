@@ -18,7 +18,11 @@ npm install --save-dev semantic-release @sourceregistry/semantic-release-jsr
 
 ```json
 {
-  "plugins": ["@semantic-release/commit-analyzer", "@semantic-release/release-notes-generator", "@sourceregistry/semantic-release-jsr"]
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@sourceregistry/semantic-release-jsr"
+  ]
 }
 ```
 
