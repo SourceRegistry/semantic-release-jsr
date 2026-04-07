@@ -18,7 +18,7 @@ npm install --save-dev semantic-release @sourceregistry/semantic-release-jsr
 
 ```json
 {
-  "plugins": ["@semantic-release/commit-analyzer", "@semantic-release/release-notes-generator", "semantic-release-jsr"]
+  "plugins": ["@semantic-release/commit-analyzer", "@semantic-release/release-notes-generator", "@sourceregistry/semantic-release-jsr"]
 }
 ```
 
@@ -27,6 +27,8 @@ npm install --save-dev semantic-release @sourceregistry/semantic-release-jsr
 - A JSR package config file: `jsr.json`, `deno.json`, or `deno.jsonc`
 - A non-empty `name` property in that config file
 - Authentication that works with the `jsr` CLI
+
+This plugin invokes `jsr publish`, not `deno publish` directly. That means plugin options only cover flags currently exposed by the JSR CLI.
 
 JSR supports GitHub Actions OIDC for linked repositories. If you use token-based auth instead, either configure the environment expected by the `jsr` CLI in your CI job or set `tokenEnvVar` so the plugin passes `--token` explicitly.
 
@@ -74,6 +76,8 @@ If your JSR package uses token-based auth instead of OIDC, also provide the envi
 | `tokenEnvVar`    | Environment variable name whose value should be passed to `jsr publish --token ...`. | Unset                                                       |
 | `allowSlowTypes` | Whether to pass `--allow-slow-types` to `jsr publish` and `jsr publish --dry-run`.   | `false`                                                     |
 
+`allowDirty` is intentionally not supported at this time. While `deno publish` documents `--allow-dirty`, the current `jsr publish` CLI does not expose that flag.
+
 ## Example
 
 ```json
@@ -82,7 +86,7 @@ If your JSR package uses token-based auth instead of OIDC, also provide the envi
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
-      "semantic-release-jsr",
+      "@sourceregistry/semantic-release-jsr",
       {
         "pkgRoot": "dist",
         "configFile": "deno.jsonc",
