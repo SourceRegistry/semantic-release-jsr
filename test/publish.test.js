@@ -38,6 +38,56 @@ test("Run jsr publish and return release info", async () => {
   ]);
 });
 
+test("Pass token to jsr publish when configured", async () => {
+  const config = { basePath: "C:\\repo\\dist", config: { name: "@scope/pkg" }, token: "token" };
+  const context = {
+    env: { JSR_TOKEN: "token" },
+    stdout: createNullWritable(),
+    stderr: createNullWritable(),
+    nextRelease: { version: "1.2.3" },
+    logger: { log() {} },
+  };
+  const calls = [];
+  const runCommand = async (...args) => {
+    calls.push(args);
+  };
+
+  await publish(config, context, runCommand);
+
+  assert.deepEqual(calls, [
+    [
+      "jsr",
+      ["publish", "--token", "token"],
+      { cwd: config.basePath, env: context.env, stdout: context.stdout, stderr: context.stderr },
+    ],
+  ]);
+});
+
+test("Pass allowSlowTypes to jsr publish when configured", async () => {
+  const config = { basePath: "C:\\repo\\dist", config: { name: "@scope/pkg" }, allowSlowTypes: true };
+  const context = {
+    env: {},
+    stdout: createNullWritable(),
+    stderr: createNullWritable(),
+    nextRelease: { version: "1.2.3" },
+    logger: { log() {} },
+  };
+  const calls = [];
+  const runCommand = async (...args) => {
+    calls.push(args);
+  };
+
+  await publish(config, context, runCommand);
+
+  assert.deepEqual(calls, [
+    [
+      "jsr",
+      ["publish", "--allow-slow-types"],
+      { cwd: config.basePath, env: context.env, stdout: context.stdout, stderr: context.stderr },
+    ],
+  ]);
+});
+
 test("Wrap jsr publish failures", async () => {
   const config = { basePath: "C:\\repo", config: { name: "@scope/pkg" } };
   const context = {

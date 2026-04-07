@@ -38,6 +38,50 @@ test("Run jsr publish dry-run", async () => {
   ]);
 });
 
+test("Pass token to jsr publish dry-run when configured", async () => {
+  const config = { basePath: "C:\\repo\\dist", token: "token" };
+  const context = {
+    env: { JSR_TOKEN: "token" },
+    stdout: createNullWritable(),
+    stderr: createNullWritable(),
+  };
+  const calls = [];
+  const runCommand = async (...args) => {
+    calls.push(args);
+  };
+
+  await assert.doesNotReject(verifyAuth(config, context, runCommand));
+  assert.deepEqual(calls, [
+    [
+      "jsr",
+      ["publish", "--dry-run", "--token", "token"],
+      { cwd: config.basePath, env: context.env, stdout: context.stdout, stderr: context.stderr },
+    ],
+  ]);
+});
+
+test("Pass allowSlowTypes to jsr publish dry-run when configured", async () => {
+  const config = { basePath: "C:\\repo\\dist", allowSlowTypes: true };
+  const context = {
+    env: {},
+    stdout: createNullWritable(),
+    stderr: createNullWritable(),
+  };
+  const calls = [];
+  const runCommand = async (...args) => {
+    calls.push(args);
+  };
+
+  await assert.doesNotReject(verifyAuth(config, context, runCommand));
+  assert.deepEqual(calls, [
+    [
+      "jsr",
+      ["publish", "--dry-run", "--allow-slow-types"],
+      { cwd: config.basePath, env: context.env, stdout: context.stdout, stderr: context.stderr },
+    ],
+  ]);
+});
+
 test("Wrap jsr publish dry-run failures", async () => {
   const config = { basePath: "C:\\repo" };
   const context = {

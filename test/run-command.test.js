@@ -55,3 +55,13 @@ test("runCommand rejects when the child emits an error", async () => {
   assert.ok(error instanceof Error);
   assert.ok(error.message.length > 0);
 });
+
+test("runCommand redacts token values in error messages", async () => {
+  const { command, args } = exitCommand(1);
+  const error = await runCommand(command, [...args, "--token", "super-secret"], createContext()).catch(
+    (caughtError) => caughtError
+  );
+
+  assert.match(error.message, /\[REDACTED\]/);
+  assert.doesNotMatch(error.message, /super-secret/);
+});

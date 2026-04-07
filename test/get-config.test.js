@@ -31,6 +31,24 @@ test("Read deno.jsonc from pkgRoot", async () => {
   assert.equal(result.configPath, configPath);
 });
 
+test("Read token from configured environment variable", async () => {
+  const cwd = await makeTempDir();
+  await writeFile(path.resolve(cwd, "jsr.json"), JSON.stringify({ name: "@scope/pkg", version: "0.0.0" }));
+
+  const result = await getConfig({ tokenEnvVar: "JSR_TOKEN" }, { cwd, env: { JSR_TOKEN: "token" } });
+
+  assert.equal(result.token, "token");
+});
+
+test("Preserve allowSlowTypes in resolved config", async () => {
+  const cwd = await makeTempDir();
+  await writeFile(path.resolve(cwd, "jsr.json"), JSON.stringify({ name: "@scope/pkg", version: "0.0.0" }));
+
+  const result = await getConfig({ allowSlowTypes: true }, { cwd });
+
+  assert.equal(result.allowSlowTypes, true);
+});
+
 test("Throw when config file is missing", async () => {
   const cwd = await makeTempDir();
   const error = await getConfig({}, { cwd }).catch((caughtError) => caughtError);
